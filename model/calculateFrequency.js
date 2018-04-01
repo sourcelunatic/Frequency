@@ -1,4 +1,5 @@
 var http=require('http');
+
 var SortedMap=require('collections/sorted-map');
 var url='';
 var option;
@@ -44,6 +45,7 @@ exports.getTextFromUrl=function(option,callback){
     });
 };
 
+
 exports.populateHashMap=function(text,callBack){
 	//This function should read the data from text and populate our hashMap
 	var map=new SortedMap();
@@ -74,3 +76,4 @@ exports.populateHashMap=function(text,callBack){
 	console.log(map)
 		callBack(map);
 };
+
