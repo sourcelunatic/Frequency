@@ -1,15 +1,15 @@
 var http=require('http');
-var regex=require('regex');
+var expect=require('chai').expect;
+//var SortedMap=require('collections/sorted-map');
 var url='';
 var option;
-//var text='';
  exports.setOption=function(url){
 	 if(url===''){
 		 option={'invalid':true};
 		 return option;
 	 }
 	 
-    url=url.replace(/htt.*:\/\//,'');
+    url=url.replace(/htt.*:\/\//i,'');
     var buf=Buffer.from(url);
     var indexofSlash=buf.indexOf('/');
     if(indexofSlash>1){
@@ -44,3 +44,90 @@ exports.getTextFromUrl=function(option,callback){
     });
 };
 
+
+
+exports.populateHashMap=function(text,callBack){
+	//This function should read the data from text and populate our hashMap
+	console.time('SortedHash');
+	var map=new SortedMap();
+	var index=0;
+	while(index<text.length){
+		var currentWord='';
+		while(true){
+			if(index==text.length || text.charAt(index)==' '){
+				break;
+			}
+			currentWord+=(text.charAt(index));
+			index++;
+		}
+		currentWord=currentWord.replace(/[^a-zA-Z'`]+/,'');
+		if(currentWord!=''){
+		    currentWord=currentWord.toLowerCase();
+			if(map.has(currentWord)){
+				var value=map.get(currentWord);
+				value++;
+				map.set(currentWord,value);
+			}else{
+				map.set(currentWord,1);
+			}
+		}
+		index++;
+	
+	}
+	console.log(map)
+	var mapAsc = new Map([...map.entries()].sort());//(a,b) => a[0] > b[0] ? 1 : a[0] < b[0] ? -1 : 0));
+	
+	
+	console.timeEnd('SortedHash');
+	//var iterator=mapAsc.entries();
+	//console.log(iterator.next());
+		callBack(map);
+};
+
+exports.getDataFromhash=function(hashMap,length,callBack){
+	var iterator=hashMap.iterate(0,length);
+	while(!iterator.done){
+		var val=iterator.next();
+		console.log(val);
+	}
+}
+/*var res=this.populateHashMap('This is ?..   Is it',function(rs){
+	console.log('sd');
+});*/
+var op=this.setOption('http://www.textfiles.com/survival/ewater.txt');
+var tect=this.getTextFromUrl(op,function(er,res){
+	var text=res.text;
+	//console.log(text);
+	console.time('SortedHash');
+	var map=new  Map();
+	var index=0;
+	while(index<text.length){
+		var currentWord='';
+		while(true){
+			if(index==text.length || text.charAt(index)==' ' ||text.charAt(index)=='\n'){
+				break;
+			}
+			currentWord+=(text.charAt(index));
+			index++;
+		}
+		currentWord=currentWord.replace(/[^a-zA-Z'`-]+/,'');
+		if(currentWord!=''){
+		    currentWord=currentWord.toLowerCase();
+			if(map.has(currentWord)){
+				var value=map.get(currentWord);
+				value++;
+				map.set(currentWord,value);
+			}else{
+				map.set(currentWord,1);
+			}
+		}
+		index++;
+	
+	}
+	console.log(map.length)
+	var mapAsc = new Map([...map.entries()].sort((a,b)=> a[1] > b[1] ?-1 : a[1] < b[1] ? 1 : 0));
+	var iterator=mapAsc.entries();
+		
+	console.timeEnd('SortedHash');
+
+});	
