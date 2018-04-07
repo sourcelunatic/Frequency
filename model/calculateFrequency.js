@@ -1,6 +1,4 @@
 var http=require('http');
-var expect=require('chai').expect;
-//var SortedMap=require('collections/sorted-map');
 var url='';
 var option;
  exports.setOption=function(url){
@@ -91,13 +89,10 @@ exports.getDataFromhash=function(hashMap,length,callBack){
 		console.log(val);
 	}
 }
-/*var res=this.populateHashMap('This is ?..   Is it',function(rs){
-	console.log('sd');
-});*/
+
 var op=this.setOption('http://www.textfiles.com/survival/ewater.txt');
 var tect=this.getTextFromUrl(op,function(er,res){
 	var text=res.text;
-	//console.log(text);
 	console.time('SortedHash');
 	var map=new  Map();
 	var index=0;
@@ -131,3 +126,4 @@ var tect=this.getTextFromUrl(op,function(er,res){
 	console.timeEnd('SortedHash');
 
 });	
+
